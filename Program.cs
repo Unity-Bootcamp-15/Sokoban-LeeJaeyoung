@@ -81,9 +81,11 @@
                 Console.Clear();
                 Console.SetCursorPosition(5, 5);
                 Console.Write();
-                // 플레이어 이동위치 지정 playerNewPosX, playerNewPosY
+
                 (int x, int y) playerNewPos = MoveObjectPos(cKey, ObjArr[0]);
 
+                // 플레이어가 오브젝트와 충돌 했을 시, 어떤 오브젝트인지 파악하여 각각 대응되도록 했습니다.
+                // 벽또는 박스와 충돌 했을 때만 특정 행동
                 for (int i = 1; i < ObjArr.Length; i++)
                 {
                     if (ObjArr[i].pos == playerNewPos) // obj와 플레이어 충돌
@@ -101,14 +103,14 @@
                                 {
                                     if (ObjArr[j].pos == boxNewPos) // 박스가 다른 오브젝트와 충돌하면
                                     {
-                                        if (ObjArr[j].drawChar == 'G')// 박스 골 충돌
+                                        if (ObjArr[j].drawChar == 'G') // 박스가 골과 충돌 시 goalCount가 증가하고 그릴문자가 O로 바뀜
                                         {
                                             goalCount++;
                                             Console.Write(goalCount);
                                             ObjArr[i] = ('O', ObjArr[j].pos);
                                             ObjArr[j] = ('O', ObjArr[j].pos);
                                         }
-                                        else
+                                        else // 박스가 골이 아닌 오브젝트와 충돌 시 움직이지 않음
                                         {
                                             isPlayerMove = false;
                                             isBoxMove = false;
@@ -116,7 +118,7 @@
                                         continue;
                                     }
                                 }
-                                if (isBoxMove)
+                                if (isBoxMove) // 박스가 다른 오브젝트와 충돌하지 않으면 플레이어와 함께 움직임
                                 {
                                     ObjArr[i] = (ObjArr[i].drawChar, boxNewPos);
                                     ObjArr[0] = (ObjArr[0].drawChar, playerNewPos);
@@ -129,12 +131,12 @@
                         }
                     }
                 }
-                if (isPlayerMove)
+                if (isPlayerMove) // 플레이어가 오브젝트와 충돌하지 않으면 키 방향으로 움직임
                     ObjArr[0].pos = playerNewPos;
 
                 isBoxMove = true;
                 isPlayerMove = true;
-                // 모든 골안에 박스가 들어있는지 확인
+                // 모든 골안에 박스가 들어있는지 확인후 결과가 참이면 게임 종료
                 if (goalPoint == goalCount)
                 {
                     Console.SetCursorPosition(5, 5);
