@@ -2,13 +2,6 @@
 {
     internal class Program
     {
-        enum MapSize : int // Object의 움직임을 제한하는 범위
-        {
-            MinPosX = 0,
-            MinPosY = 0,
-            MaxPosX = 20,
-            MaxPosY = 20
-        }
         static void Main(string[] args)
         {
             // 콘솔 초기화
@@ -19,6 +12,8 @@
             Console.CursorVisible = false;
             Console.Clear();
 
+            // 맵의 모양을 자유롭게 설정하기 위해서 tuple 배열을 썼습니다.
+            // Dictionary나 이중배열을 쓰는게 접근 속도면에서 더 나을 듯 합니다.
             (char drawChar, (int x, int y) pos)[] ObjArr = new (char, (int, int))[] //맵은 제미나이가 만들어 줬습니다.
             {
                 // 플레이어 (P)
@@ -84,13 +79,14 @@
                 cKey = Console.ReadKey();
 
                 Console.Clear();
-
+                Console.SetCursorPosition(5, 5);
+                Console.Write();
                 // 플레이어 이동위치 지정 playerNewPosX, playerNewPosY
                 (int x, int y) playerNewPos = MoveObjectPos(cKey, ObjArr[0]);
 
                 for (int i = 1; i < ObjArr.Length; i++)
                 {
-                    if (ObjArr[i].pos == playerNewPos)// obj와 플레이어 충돌
+                    if (ObjArr[i].pos == playerNewPos) // obj와 플레이어 충돌
                     {
                         switch (ObjArr[i].drawChar) //충돌한 obj에 따른 case
                         {
@@ -149,7 +145,6 @@
                     Console.ReadKey();
                     break;
                 }
-
             }
         }
 
@@ -165,16 +160,16 @@
             switch (key.Key)
             {
                 case ConsoleKey.LeftArrow:
-                    obj.pos.x = Math.Max((int)MapSize.MinPosX, obj.pos.x - 1);
+                    obj.pos.x--;
                     break;
                 case ConsoleKey.RightArrow:
-                    obj.pos.x = Math.Min((int)MapSize.MaxPosX, obj.pos.x + 1);
+                    obj.pos.x++;
                     break;
                 case ConsoleKey.UpArrow:
-                    obj.pos.y = Math.Max((int)MapSize.MinPosY, obj.pos.y - 1);
+                    obj.pos.y--;
                     break;
                 case ConsoleKey.DownArrow:
-                    obj.pos.y = Math.Min((int)MapSize.MaxPosY, obj.pos.y + 1);
+                    obj.pos.y++;
                     break;
                 default:
                     Console.SetCursorPosition(10, 20);
